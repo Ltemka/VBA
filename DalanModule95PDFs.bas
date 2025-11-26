@@ -17,10 +17,10 @@ Sub Randomize_And_SavePDF_PerRow()
     Set wsT = ThisWorkbook.Worksheets("Template")  ' Template sheet
     Set wsD = ThisWorkbook.Worksheets("Data")      ' Data sheet
     
-    ' Data sheet дээрх с??лийн м?р (A баганаар тооцож байна)
+    ' Data sheet РґСЌСЌСЂС… СЃТЇТЇР»РёР№РЅ РјУ©СЂ (A Р±Р°РіР°РЅР°Р°СЂ С‚РѕРѕС†РѕР¶ Р±Р°Р№РЅР°)
     lastRow = wsD.Cells(wsD.Rows.Count, "A").End(xlUp).Row
     
-    ' PDF хадгалах хавтас: файлынхаа хавтсанд "PDFs" гэдэг фолдер ??сгэнэ
+    ' PDF С…Р°РґРіР°Р»Р°С… С…Р°РІС‚Р°СЃ: С„Р°Р№Р»С‹РЅС…Р°Р° С…Р°РІС‚СЃР°РЅРґ "PDFs" РіСЌРґСЌРі С„РѕР»РґРµСЂ ТЇТЇСЃРіСЌРЅСЌ
     pdfPath = ThisWorkbook.Path & "\PDFs"
     If Dir(pdfPath, vbDirectory) = "" Then
         MkDir pdfPath
@@ -31,25 +31,25 @@ Sub Randomize_And_SavePDF_PerRow()
     Application.ScreenUpdating = False
     Application.Calculation = xlCalculationManual
     
-    ' М?р б?рээр г?йж PDF ??сгэнэ
-    For i = 2 To lastRow          ' 2-р м?р??с эхэлнэ (толгой м?рийг алгасна)
+    ' РњУ©СЂ Р±ТЇСЂСЌСЌСЂ РіТЇР№Р¶ PDF ТЇТЇСЃРіСЌРЅСЌ
+    For i = 2 To lastRow          ' 2-СЂ РјУ©СЂУ©У©СЃ СЌС…СЌР»РЅСЌ (С‚РѕР»РіРѕР№ РјУ©СЂРёР№Рі Р°Р»РіР°СЃРЅР°)
         
-        ' 1) Template дээр J1-д энэ м?рийн дугаарыг ?гн?
-        '    Хэрвээ L2 ашигладаг бол J1-ийг L2 болгож солино.
+        ' 1) Template РґСЌСЌСЂ J1-Рґ СЌРЅСЌ РјУ©СЂРёР№РЅ РґСѓРіР°Р°СЂС‹Рі У©РіРЅУ©
+        '    РҐСЌСЂРІСЌСЌ L2 Р°С€РёРіР»Р°РґР°Рі Р±РѕР» J1-РёР№Рі L2 Р±РѕР»РіРѕР¶ СЃРѕР»РёРЅРѕ.
         wsT.Range("J1").Value = i
         
-        ' 2) Энэ м?р дээр нягтрал OK болох х?ртэл 1000 удаа random-дож шалгана
+        ' 2) Р­РЅСЌ РјУ©СЂ РґСЌСЌСЂ РЅСЏРіС‚СЂР°Р» OK Р±РѕР»РѕС… С…ТЇСЂС‚СЌР» 1000 СѓРґР°Р° random-РґРѕР¶ С€Р°Р»РіР°РЅР°
         For j = 1 To 1000
             
-            wsT.Calculate   ' RANDBETWEEN-??д шинэчлэгдэнэ
+            wsT.Calculate   ' RANDBETWEEN-ТЇТЇРґ С€РёРЅСЌС‡Р»СЌРіРґСЌРЅСЌ
             
             nonEmptyCount = 0
             ok = True
             
-            ' E27, F27, G27, H27, I27 н?дн??дийг шалгана
+            ' E27, F27, G27, H27, I27 РЅТЇРґРЅТЇТЇРґРёР№Рі С€Р°Р»РіР°РЅР°
             For Each addr In cellsArr
                 With wsT.Range(addr)
-                    If Trim(.Value & "") <> "" Then  ' утгатай н?д л шалгана
+                    If Trim(.Value & "") <> "" Then  ' СѓС‚РіР°С‚Р°Р№ РЅТЇРґ Р» С€Р°Р»РіР°РЅР°
                         nonEmptyCount = nonEmptyCount + 1
                         If .Value < 95 Or .Value > 100 Then
                             ok = False
@@ -59,12 +59,12 @@ Sub Randomize_And_SavePDF_PerRow()
                 End With
             Next addr
             
-            ' Хэрвээ б?гд хоосон байвал: энэ м?рийг з?гээр орхи, PDF ??сгэхг?й
+            ' РҐСЌСЂРІСЌСЌ Р±ТЇРіРґ С…РѕРѕСЃРѕРЅ Р±Р°Р№РІР°Р»: СЌРЅСЌ РјУ©СЂРёР№Рі Р·ТЇРіСЌСЌСЂ РѕСЂС…Рё, PDF ТЇТЇСЃРіСЌС…РіТЇР№
             If nonEmptyCount = 0 Then
-                Exit For    ' энэ м?р дууссан > дараагийн м?р р??
+                Exit For    ' СЌРЅСЌ РјУ©СЂ РґСѓСѓСЃСЃР°РЅ в†’ РґР°СЂР°Р°РіРёР№РЅ РјУ©СЂ СЂТЇТЇ
             End If
             
-            ' Хэрвээ утгатай б?х н?д 95–100 хооронд байвал > PDF ??сгэнэ
+            ' РҐСЌСЂРІСЌСЌ СѓС‚РіР°С‚Р°Р№ Р±ТЇС… РЅТЇРґ 95вЂ“100 С…РѕРѕСЂРѕРЅРґ Р±Р°Р№РІР°Р» в†’ PDF ТЇТЇСЃРіСЌРЅСЌ
             If ok Then
                 fileName = pdfPath & "\Row_" & i & "_" & _
                            Format(Now, "yyyymmdd_hhnnss") & ".pdf"
@@ -74,7 +74,7 @@ Sub Randomize_And_SavePDF_PerRow()
                     IncludeDocProperties:=True, IgnorePrintAreas:=False, _
                     OpenAfterPublish:=False
                 
-                Exit For    ' энэ м?р OK боллоо > дараагийн м?р р??
+                Exit For    ' СЌРЅСЌ РјУ©СЂ OK Р±РѕР»Р»РѕРѕ в†’ РґР°СЂР°Р°РіРёР№РЅ РјУ©СЂ СЂТЇТЇ
             End If
             
         Next j
@@ -84,8 +84,9 @@ Sub Randomize_And_SavePDF_PerRow()
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
     
-    MsgBox "Data sheet дээрх б?х м?рийг боловсруулж дууслаа. 'PDFs' хавтсанд PDF-??дээ шалгаарай.", vbInformation
+    MsgBox "Data sheet РґСЌСЌСЂС… Р±ТЇС… РјУ©СЂРёР№Рі Р±РѕР»РѕРІСЃСЂСѓСѓР»Р¶ РґСѓСѓСЃР»Р°Р°. 'PDFs' С…Р°РІС‚СЃР°РЅРґ PDF-ТЇТЇРґСЌСЌ С€Р°Р»РіР°Р°СЂР°Р№.", vbInformation
 
 End Sub
+
 
 
